@@ -1,0 +1,15 @@
+{
+  "name": "homesince",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Home since - put yourself in a classic betterhomes ad from the year Dubai became home.",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

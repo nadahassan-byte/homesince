@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home since · star in a betterhomes ad</title>
+<meta name="description" content="Upload a selfie, tell us the year Dubai became home, and star in the betterhomes ad from that era.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<main class="sheet">
+  <header class="intro">
+    <p class="kicker">#yourbhomestory · Home since</p>
+    <h1>Your selfie, <em>in the betterhomes ad from the year Dubai became home.</em></h1>
+    <p class="lede">
+      Upload a selfie, add your community and the year you moved in, and press Create.
+      We match you to a classic betterhomes ad from that era and put you in it &mdash; a
+      1986 newspaper classified, a 1994 brochure, a 2006 billboard, a 2015 cover or a
+      post from today. The ad layout, logo and plaque are a fixed design; only the
+      photograph is generated.
+    </p>
+  </header>
+
+  <div class="stages">
+    <!-- 01 -->
+    <section class="stage" aria-labelledby="s1">
+      <p class="stage__num" id="s1">01 · Selfie, community, year</p>
+      <div class="card form-card">
+        <p class="kicker small">#yourbhomestory · Home since</p>
+        <h2 class="card__title">When did Dubai <em>become home?</em></h2>
+
+        <input id="file" class="visually-hidden" type="file" accept="image/png,image/jpeg,image/webp" capture="user">
+        <div class="drop" id="drop" tabindex="0" role="button" aria-label="Add a selfie">
+          <img id="thumb" alt="Your selfie" hidden>
+          <div class="drop__inner">
+            <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+              <path d="M3 8.5A2.5 2.5 0 0 1 5.5 6h1.8l1.1-1.7A1 1 0 0 1 9.2 4h5.6a1 1 0 0 1 .8.3L16.7 6h1.8A2.5 2.5 0 0 1 21 8.5v8A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="12" cy="12.5" r="3.4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            <span>
+              <strong id="drop-copy">Add a selfie</strong>
+              <small>Face the camera · good light</small>
+            </span>
+          </div>
+        </div>
+
+        <label class="field">
+          <span>Your community</span>
+          <input id="community" type="text" placeholder="e.g. Arabian Ranches" autocomplete="off" maxlength="60">
+        </label>
+
+        <label class="field">
+          <span>The year you moved in</span>
+          <input id="year" type="number" inputmode="numeric" placeholder="e.g. 2009" min="1960" max="2026">
+        </label>
+
+        <p class="ad-match">Your ad: <strong id="ad-name">Add a year and we will pick the ad</strong></p>
+
+        <label class="consent">
+          <input id="consent" type="checkbox">
+          <span>This is me, and I&rsquo;m happy for betterhomes to create an AI portrait from my photo.</span>
+        </label>
+
+        <p class="error" id="form-error" hidden></p>
+        <button class="btn btn--primary" id="create" disabled>Create my Home since ad</button>
+      </div>
+    </section>
+
+    <!-- 02 -->
+    <section class="stage" aria-labelledby="s2">
+      <p class="stage__num" id="s2">02 · Developing (10 to 30 seconds)</p>
+      <div class="card dev-card" id="stage2">
+        <div class="dev-card__window"></div>
+        <p class="dev-card__year" id="dev-year">&mdash;</p>
+        <div class="dev-card__rule"><span id="dev-bar"></span></div>
+        <p class="dev-card__status" id="dev-status">Press Create on the first screen.</p>
+      </div>
+    </section>
+
+    <!-- 03 -->
+    <section class="stage" aria-labelledby="s3">
+      <p class="stage__num" id="s3">03 · You, in the ad</p>
+      <div class="card result-card">
+        <div class="poster-wrap">
+          <canvas id="poster" aria-label="Your Home since ad"></canvas>
+        </div>
+        <div class="result-card__foot">
+          <h3 id="result-title">Your ad, when it is ready.</h3>
+          <p id="result-caption">Press Create on the first screen.</p>
+          <p class="notice" id="notice" hidden></p>
+          <div class="actions" id="result-actions" hidden>
+            <button class="btn btn--primary" id="share">Share</button>
+            <button class="btn" id="download">Download</button>
+            <button class="btn btn--quiet" id="again">Start again</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="picker" aria-labelledby="picker-title">
+    <p class="kicker" id="picker-title">The classic ads · click to preview</p>
+    <div class="era-cards" id="era-cards"></div>
+  </section>
+
+  <footer class="foot">
+    <p>Portraits are generated from the photo you upload and are not kept after the session. The ad layouts are betterhomes designs; the photograph is AI generated and labelled as such.</p>
+  </footer>
+</main>
+<script type="module" src="/js/app.js"></script>
+</body>
+</html>
