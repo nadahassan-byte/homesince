@@ -2,7 +2,9 @@ import express from 'express';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { eraById, eraForYear, YEAR_MIN, YEAR_MAX } from '../shared/eras.js';
+import {
+  eraById, eraForYear, skinToneById, presentationById, YEAR_MIN, YEAR_MAX,
+} from '../shared/eras.js';
 import { buildPrompt, creditLine } from './prompts.js';
 import { resolveProvider, providerStatus } from './providers/index.js';
 
@@ -28,12 +30,22 @@ app.get('/api/health', (_req, res) => {
 
 app.post('/api/portrait', async (req, res) => {
   const started = Date.now();
-  const { imageDataUrl, community = '', year, eraId, consent } = req.body || {};
+  const {
+    imageDataUrl, community = '', year, eraId, consent, over18,
+    toneId, presentationId,
+  } = req.body || {};
 
   if (consent !== true) {
     return res.status(400).json({
       error: 'consent_required',
       message: 'We need the tick box before we can make a portrait from a photo.',
+    });
+  }
+
+  if (over18 !== true) {
+    return res.status(400).json({
+      error: 'age_required',
+      message: 'This is for entrants aged 18 and over.',
     });
   }
 
@@ -61,7 +73,13 @@ app.post('/api/portrait', async (req, res) => {
   }
 
   const { id: providerId, provider, reason } = resolveProvider(env);
-  const prompt = buildPrompt({ era, community: String(community).slice(0, 80), year: parsedYear });
+  const prompt = buildPrompt({
+    era,
+    community: String(community).slice(0, 80),
+    year: parsedYear,
+    tone: skinToneById(toneId),
+    presentation: presentationById(presentationId),
+  });
 
   // No provider configured: tell the browser to keep its filtered preview.
   if (!provider) {

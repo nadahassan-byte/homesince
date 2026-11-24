@@ -561,7 +561,154 @@ function post(ctx, { photo, era, year, community }) {
   tracked(ctx, plaque, card.x + 70, py + 35, 3);
 }
 
-const TEMPLATES = { classified, brochure, billboard, cover, post };
+function sixsheet(ctx, { photo, era, year, community }) {
+  const p = era.palette;
+  ctx.fillStyle = p.paper;
+  ctx.fillRect(0, 0, POSTER_W, POSTER_H);
+
+  // pasted-up paper edges
+  ctx.fillStyle = 'rgba(0,0,0,0.05)';
+  ctx.fillRect(0, POSTER_H * 0.52 - 3, POSTER_W, 3);
+
+  const photoH = POSTER_H * 0.52;
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(0, 0, POSTER_W, photoH);
+  ctx.clip();
+  drawCover(ctx, photo, 0, 0, POSTER_W, photoH, 0.22);
+  ctx.restore();
+
+  // wordmark bar
+  ctx.fillStyle = p.accent;
+  ctx.fillRect(0, photoH, POSTER_W, 76);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = `700 34px ${SANS}`;
+  ctx.textAlign = 'left';
+  tracked(ctx, era.kicker.toLowerCase(), 64, photoH + 51, 1);
+  ctx.font = `400 24px ${MONO}`;
+  ctx.textAlign = 'right';
+  tracked(ctx, `EST. 1986`, POSTER_W - 64, photoH + 50, 4, 'right');
+
+  // the shout
+  ctx.fillStyle = p.ink;
+  ctx.textAlign = 'left';
+  const last = headline(ctx, era.headline, {
+    x: 64,
+    y: photoH + 196,
+    maxWidth: POSTER_W - 128,
+    size: 108,
+    lineHeight: 0.98,
+    font: `800 {size} ${SANS}`,
+    align: 'left',
+  });
+
+  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  ctx.font = `400 28px ${SANS}`;
+  era.body.forEach((line, i) => {
+    ctx.fillText(line, 64, last + 62 + i * 38);
+  });
+
+  // plaque + phone number along the bottom
+  const plaque = plaqueText(year, community);
+  ctx.font = `600 23px ${MONO}`;
+  const pw = trackedWidth(ctx, plaque, 3) + 52;
+  const py = POSTER_H - 164;
+  ctx.fillStyle = p.accent;
+  roundRect(ctx, 64, py, pw, 56, 6);
+  ctx.fill();
+  ctx.fillStyle = '#ffffff';
+  tracked(ctx, plaque, 90, py + 36, 3);
+
+  ctx.fillStyle = p.ink;
+  ctx.font = `800 46px ${SANS}`;
+  ctx.fillText(era.signoff, 64, POSTER_H - 58);
+}
+
+function guide(ctx, { photo, era, year, community }) {
+  const p = era.palette;
+  ctx.fillStyle = p.paper;
+  ctx.fillRect(0, 0, POSTER_W, POSTER_H);
+  paperGrain(ctx, 0, 0, POSTER_W, POSTER_H, 0.02);
+
+  // masthead
+  ctx.fillStyle = p.ink;
+  ctx.fillRect(0, 0, POSTER_W, 92);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = `600 22px ${MONO}`;
+  ctx.textAlign = 'left';
+  tracked(ctx, era.kicker, 56, 56, 5);
+  ctx.textAlign = 'right';
+  tracked(ctx, String(era.adYear), POSTER_W - 56, 56, 5, 'right');
+  ctx.textAlign = 'left';
+
+  // hero listing photo
+  const box = { x: 56, y: 132, w: POSTER_W - 112, h: 600 };
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(box.x, box.y, box.w, box.h);
+  ctx.clip();
+  drawCover(ctx, photo, box.x, box.y, box.w, box.h, 0.26);
+  ctx.restore();
+
+  // price flag over the photo corner
+  ctx.fillStyle = p.accent;
+  ctx.fillRect(box.x, box.y + box.h - 86, 300, 86);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = `700 25px ${SANS}`;
+  ctx.fillText('NEW LISTING', box.x + 24, box.y + box.h - 52);
+  ctx.font = `400 21px ${MONO}`;
+  ctx.fillText(`HOME SINCE ${year}`, box.x + 24, box.y + box.h - 22);
+
+  // headline
+  ctx.fillStyle = p.ink;
+  ctx.textAlign = 'left';
+  const last = headline(ctx, era.headline, {
+    x: 56,
+    y: box.y + box.h + 104,
+    maxWidth: POSTER_W - 112,
+    size: 74,
+    lineHeight: 1.04,
+    font: `700 {size} ${SERIF}`,
+    align: 'left',
+  });
+
+  // listing details
+  ctx.fillStyle = p.muted;
+  ctx.font = `400 26px ${SANS}`;
+  const details = [
+    (community || 'Dubai').trim(),
+    ...era.body,
+  ];
+  details.forEach((line, i) => {
+    const y = last + 58 + i * 42;
+    ctx.fillStyle = p.accent;
+    ctx.fillRect(56, y - 9, 8, 8);
+    ctx.fillStyle = p.muted;
+    ctx.fillText(line, 80, y);
+  });
+
+  // agent strip
+  const stripY = POSTER_H - 132;
+  ctx.fillStyle = p.ink;
+  ctx.fillRect(0, stripY, POSTER_W, 132);
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(110, stripY + 66, 38, 0, Math.PI * 2);
+  ctx.clip();
+  drawCover(ctx, photo, 72, stripY + 28, 76, 76, 0.18);
+  ctx.restore();
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = `600 24px ${MONO}`;
+  ctx.textAlign = 'left';
+  tracked(ctx, plaqueText(year, community), 172, stripY + 60, 3);
+  ctx.fillStyle = 'rgba(255,255,255,0.6)';
+  ctx.font = `400 22px ${MONO}`;
+  tracked(ctx, era.signoff, 172, stripY + 94, 3);
+}
+
+const TEMPLATES = { classified, brochure, sixsheet, billboard, guide, cover, post };
 
 /**
  * Render a finished poster.

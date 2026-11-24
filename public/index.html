@@ -2,114 +2,179 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Home since · star in a betterhomes ad</title>
-<meta name="description" content="Upload a selfie, tell us the year Dubai became home, and star in the betterhomes ad from that era.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Home since · betterhomes</title>
+<meta name="description" content="Star in a classic betterhomes ad from the year Dubai became home.">
+<meta name="theme-color" content="#16303f">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-<main class="sheet">
-  <header class="intro">
-    <p class="kicker">#yourbhomestory · Home since</p>
-    <h1>Your selfie, <em>in the betterhomes ad from the year Dubai became home.</em></h1>
-    <p class="lede">
-      Upload a selfie, add your community and the year you moved in, and press Create.
-      We match you to a classic betterhomes ad from that era and put you in it &mdash; a
-      1986 newspaper classified, a 1994 brochure, a 2006 billboard, a 2015 cover or a
-      post from today. The ad layout, logo and plaque are a fixed design; only the
-      photograph is generated.
-    </p>
-  </header>
 
-  <div class="stages">
-    <!-- 01 -->
-    <section class="stage" aria-labelledby="s1">
-      <p class="stage__num" id="s1">01 · Selfie, community, year</p>
-      <div class="card form-card">
-        <p class="kicker small">#yourbhomestory · Home since</p>
-        <h2 class="card__title">When did Dubai <em>become home?</em></h2>
+<header class="topbar">
+  <span class="wordmark">betterhomes</span>
+  <span class="topbar__tag">Home since</span>
+  <button class="topbar__restart" id="restart" hidden>Start again</button>
+</header>
 
-        <input id="file" class="visually-hidden" type="file" accept="image/png,image/jpeg,image/webp" capture="user">
-        <div class="drop" id="drop" tabindex="0" role="button" aria-label="Add a selfie">
-          <img id="thumb" alt="Your selfie" hidden>
-          <div class="drop__inner">
-            <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
-              <path d="M3 8.5A2.5 2.5 0 0 1 5.5 6h1.8l1.1-1.7A1 1 0 0 1 9.2 4h5.6a1 1 0 0 1 .8.3L16.7 6h1.8A2.5 2.5 0 0 1 21 8.5v8A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5z" fill="none" stroke="currentColor" stroke-width="1.5"/>
-              <circle cx="12" cy="12.5" r="3.4" fill="none" stroke="currentColor" stroke-width="1.5"/>
-            </svg>
-            <span>
-              <strong id="drop-copy">Add a selfie</strong>
-              <small>Face the camera · good light</small>
-            </span>
-          </div>
-        </div>
+<div class="progress" id="progress" hidden><span id="progress-bar"></span></div>
 
-        <label class="field">
-          <span>Your community</span>
-          <input id="community" type="text" placeholder="e.g. Arabian Ranches" autocomplete="off" maxlength="60">
-        </label>
+<main id="app">
 
-        <label class="field">
-          <span>The year you moved in</span>
-          <input id="year" type="number" inputmode="numeric" placeholder="e.g. 2009" min="1960" max="2026">
-        </label>
-
-        <p class="ad-match">Your ad: <strong id="ad-name">Add a year and we will pick the ad</strong></p>
-
-        <label class="consent">
-          <input id="consent" type="checkbox">
-          <span>This is me, and I&rsquo;m happy for betterhomes to create an AI portrait from my photo.</span>
-        </label>
-
-        <p class="error" id="form-error" hidden></p>
-        <button class="btn btn--primary" id="create" disabled>Create my Home since ad</button>
-      </div>
-    </section>
-
-    <!-- 02 -->
-    <section class="stage" aria-labelledby="s2">
-      <p class="stage__num" id="s2">02 · Developing (10 to 30 seconds)</p>
-      <div class="card dev-card" id="stage2">
-        <div class="dev-card__window"></div>
-        <p class="dev-card__year" id="dev-year">&mdash;</p>
-        <div class="dev-card__rule"><span id="dev-bar"></span></div>
-        <p class="dev-card__status" id="dev-status">Press Create on the first screen.</p>
-      </div>
-    </section>
-
-    <!-- 03 -->
-    <section class="stage" aria-labelledby="s3">
-      <p class="stage__num" id="s3">03 · You, in the ad</p>
-      <div class="card result-card">
-        <div class="poster-wrap">
-          <canvas id="poster" aria-label="Your Home since ad"></canvas>
-        </div>
-        <div class="result-card__foot">
-          <h3 id="result-title">Your ad, when it is ready.</h3>
-          <p id="result-caption">Press Create on the first screen.</p>
-          <p class="notice" id="notice" hidden></p>
-          <div class="actions" id="result-actions" hidden>
-            <button class="btn btn--primary" id="share">Share</button>
-            <button class="btn" id="download">Download</button>
-            <button class="btn btn--quiet" id="again">Start again</button>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <section class="picker" aria-labelledby="picker-title">
-    <p class="kicker" id="picker-title">The classic ads · click to preview</p>
-    <div class="era-cards" id="era-cards"></div>
+  <!-- 0 · landing ------------------------------------------------------- -->
+  <section class="screen is-active" data-step="start">
+    <div class="screen__inner center">
+      <p class="kicker">#yourbhomestory</p>
+      <h1 class="display">Star in the betterhomes ad from the year <em>Dubai became home.</em></h1>
+      <p class="lede">
+        Seven ads, four decades. Pick your poster, tell us how you want to look,
+        add a selfie, and we put you in it.
+      </p>
+      <button class="btn btn--primary btn--big" data-go="age">Create my ad</button>
+      <p class="fineprint">Free to enter. You need to be 18 or over.</p>
+    </div>
   </section>
 
-  <footer class="foot">
-    <p>Portraits are generated from the photo you upload and are not kept after the session. The ad layouts are betterhomes designs; the photograph is AI generated and labelled as such.</p>
-  </footer>
+  <!-- 1 · age gate ------------------------------------------------------ -->
+  <section class="screen" data-step="age">
+    <div class="screen__inner center">
+      <p class="step-label">Step 1 of 5</p>
+      <h2 class="display display--sm">Are you 18 or over?</h2>
+      <p class="lede">We need to ask before you upload a photo of yourself.</p>
+      <div class="choice-row">
+        <button class="btn btn--primary btn--big" id="age-yes">Yes, I am</button>
+        <button class="btn btn--big" id="age-no">No</button>
+      </div>
+      <p class="fineprint" id="age-no-msg" hidden>
+        Sorry &mdash; you need to be 18 or over to take part.
+      </p>
+    </div>
+  </section>
+
+  <!-- 2 · pick the ad --------------------------------------------------- -->
+  <section class="screen" data-step="poster">
+    <div class="screen__inner">
+      <p class="step-label">Step 2 of 5</p>
+      <h2 class="display display--sm">Pick your poster.</h2>
+      <p class="lede">
+        Seven classic betterhomes ads. Not sure? Tell us the year you moved in
+        and we&rsquo;ll pick your era.
+      </p>
+
+      <label class="inline-field">
+        <span>The year you moved to Dubai</span>
+        <input id="year" type="number" inputmode="numeric" placeholder="e.g. 2009" min="1960" max="2026">
+      </label>
+
+      <div class="poster-grid" id="poster-grid"></div>
+      <div class="screen__foot">
+        <button class="btn btn--primary btn--big" id="poster-next" disabled>Next</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · how you want to look ------------------------------------------ -->
+  <section class="screen" data-step="look">
+    <div class="screen__inner">
+      <p class="step-label">Step 3 of 5</p>
+      <h2 class="display display--sm">How should we picture you?</h2>
+      <p class="lede">
+        This tells the model how to depict you, so you are shown the way you
+        choose rather than the way it guesses.
+      </p>
+
+      <p class="field-label">Your skin tone</p>
+      <div class="tone-row" id="tone-row"></div>
+
+      <p class="field-label">In the ad, I want to look</p>
+      <div class="pill-row" id="presentation-row"></div>
+
+      <label class="inline-field">
+        <span>Your community <small>(optional, goes on the plaque)</small></span>
+        <input id="community" type="text" placeholder="e.g. Arabian Ranches" autocomplete="off" maxlength="60">
+      </label>
+
+      <div class="screen__foot">
+        <button class="btn btn--primary btn--big" id="look-next" disabled>Next</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · the selfie ----------------------------------------------------- -->
+  <section class="screen" data-step="selfie">
+    <div class="screen__inner">
+      <p class="step-label">Step 4 of 5</p>
+      <h2 class="display display--sm">Now the selfie.</h2>
+      <p class="lede">Face the camera, good light, just you in the shot.</p>
+
+      <input id="file" class="visually-hidden" type="file" accept="image/png,image/jpeg,image/webp">
+      <input id="camera" class="visually-hidden" type="file" accept="image/*" capture="user">
+
+      <div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload a selfie">
+        <img id="thumb" alt="" hidden>
+        <div class="drop__inner">
+          <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+            <path d="M3 8.5A2.5 2.5 0 0 1 5.5 6h1.8l1.1-1.7A1 1 0 0 1 9.2 4h5.6a1 1 0 0 1 .8.3L16.7 6h1.8A2.5 2.5 0 0 1 21 8.5v8A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="12" cy="12.5" r="3.4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          <span>
+            <strong id="drop-copy">Upload a photo</strong>
+            <small>JPEG, PNG or WebP</small>
+          </span>
+        </div>
+      </div>
+      <button class="btn btn--ghost" id="take-photo">Take one now</button>
+
+      <label class="consent">
+        <input id="consent" type="checkbox">
+        <span>This is me, and I&rsquo;m happy for betterhomes to create an AI portrait from my photo.</span>
+      </label>
+
+      <p class="error" id="form-error" hidden></p>
+
+      <div class="screen__foot">
+        <button class="btn btn--primary btn--big" id="create" disabled>Create my ad</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · developing ----------------------------------------------------- -->
+  <section class="screen screen--dark" data-step="developing">
+    <div class="screen__inner center">
+      <div class="developing">
+        <div class="developing__window"></div>
+        <p class="developing__year" id="dev-year">&mdash;</p>
+        <div class="developing__rule"><span id="dev-bar"></span></div>
+        <p class="developing__status" id="dev-status">Opening the archive</p>
+        <p class="developing__queue" id="dev-queue"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 · the result ------------------------------------------------------ -->
+  <section class="screen" data-step="result">
+    <div class="screen__inner center">
+      <h2 class="display display--sm" id="result-title">Home since.</h2>
+      <p class="credit" id="result-caption"></p>
+      <div class="poster-frame">
+        <canvas id="poster" aria-label="Your Home since ad"></canvas>
+      </div>
+      <p class="notice" id="notice" hidden></p>
+      <div class="actions">
+        <button class="btn btn--primary btn--big" id="share">Share</button>
+        <button class="btn btn--big" id="download">Download</button>
+      </div>
+      <button class="btn btn--ghost" id="another">Try another era</button>
+      <p class="fineprint" id="result-fineprint">
+        The ad layout, logo and plaque are a fixed betterhomes design.
+      </p>
+    </div>
+  </section>
+
 </main>
+
 <script type="module" src="/js/app.js"></script>
 </body>
 </html>
